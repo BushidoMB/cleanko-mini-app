@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleanko</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #f9fafc;
+            --tg-theme-text-color: #1a2b3c;
+            --tg-theme-button-color: #00aaff;
+            --tg-theme-button-text-color: #fff;
+            --tg-theme-hint-color: #7a8b9a;
+            --tg-theme-secondary-bg-color: #e6f0fa;
+            --accent-color: #ff6f61;
+        }
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #e6f0fa 0%, #f9fafc 100%);
+            color: var(--tg-theme-text-color);
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            text-align: center;
+            background: linear-gradient(45deg, var(--tg-theme-button-color), #007acc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+            animation: fadeIn 1s ease-in;
+        }
+        h2 {
+            font-size: 26px;
+            margin: 30px 0 20px;
+            color: var(--tg-theme-text-color);
+        }
+        .services {
+            margin-bottom: 40px;
+        }
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .service-item {
+            background: var(--tg-theme-bg-color);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .service-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+        .service-item.selected {
+            background: linear-gradient(45deg, var(--tg-theme-button-color), #007acc);
+            color: var(--tg-theme-button-text-color);
+        }
+        .service-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .service-item:hover::before {
+            opacity: 1;
+        }
+        .icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            animation: bounceIn 0.5s ease;
+        }
+        .service-item h3 {
+            font-size: 22px;
+            margin: 0 0 10px;
+        }
+        .service-item p {
+            font-size: 16px;
+            color: var(--tg-theme-hint-color);
+            margin: 0 0 15px;
+        }
+        button {
+            background: linear-gradient(45deg, var(--tg-theme-button-color), #007acc);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+        .order-form {
+            background: var(--tg-theme-bg-color);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s, transform 0.4s;
+            display: none;
+        }
+        .order-form.visible {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--tg-theme-secondary-bg-color);
+            color: var(--tg-theme-text-color);
+            transition: box-shadow 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 170, 255, 0.5);
+        }
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .extras {
+            display: grid;
+            gap: 10px;
+        }
+        .extra-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        .total {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--accent-color);
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: linear-gradient(45deg, var(--tg-theme-button-color), var(--accent-color));
+        }
+        .cancel-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #d1d5db, #9ca3af);
+            color: var(--tg-theme-text-color);
+            margin-top: 15px;
+        }
+        .gallery {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding-bottom: 20px;
+        }
+        .gallery img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .reviews {
+            margin-bottom: 40px;
+        }
+        .review-item {
+            background: var(--tg-theme-secondary-bg-color);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        .contact-btn {
+            background: linear-gradient(45deg, #34c759, #28a745);
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cleanko</h1>
+        <div class="services">
+            <h2>Выберите услугу</h2>
+            <div class="service-list">
+                <div class="service-item">
+                    <span class="icon">🧹</span>
+                    <h3>Генеральная уборка</h3>
+                    <p>От 600 000 сум</p>
+                    <button onclick="selectService('Генеральная уборка', 600000)">Выбрать</button>
+                </div>
+                <div class="service-item">
+                    <span class="icon">🧼</span>
+                    <h3>Поддерживающая уборка</h3>
+                    <p>От 400 000 сум</p>
+                    <button onclick="selectService('Поддерживающая уборка', 400000)">Выбрать</button>
+                </div>
+                <div class="service-item">
+                    <span class="icon">🪟</span>
+                    <h3>Мытье окон</h3>
+                    <p>От 100 000 сум</p>
+                    <button onclick="selectService('Мытье окон', 100000)">Выбрать</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-form" id="orderForm">
+            <h2>Оформить заказ</h2>
+            <form id="cleaningForm">
+                <div class="form-group">
+                    <label>Выбранная услуга:</label>
+                    <span id="selectedService"></span>
+                </div>
+                <div class="form-group">
+                    <label for="area">Площадь (м²):</label>
+                    <input type="number" id="area" min="10" placeholder="Введите площадь" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Дата уборки:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Время:</label>
+                    <input type="time" id="time" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Адрес:</label>
+                    <textarea id="address" required placeholder="Введите адрес в Ташкенте..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Дополнительные услуги:</label>
+                    <div class="extras">
+                        <div class="extra-item">
+                            <span>Химчистка мебели (+200 000 сум)</span>
+                            <input type="checkbox" class="extra" data-price="200000">
+                        </div>
+                        <div class="extra-item">
+                            <span>Мытье холодильника (+100 000 сум)</span>
+                            <input type="checkbox" class="extra" data-price="100000">
+                        </div>
+                        <div class="extra-item">
+                            <span>Глажка белья (+150 000 сум)</span>
+                            <input type="checkbox" class="extra" data-price="150000">
+                        </div>
+                    </div>
+                </div>
+                <div class="total" id="totalCost">Итого: 0 сум</div>
+                <button type="submit" class="submit-btn">Заказать</button>
+                <button type="button" class="cancel-btn" onclick="cancelOrder()">Отмена</button>
+            </form>
+        </div>
+
+        <div class="gallery">
+            <h2>Наши работы</h2>
+            <div>
+                <img src="https://via.placeholder.com/200x150?text=До" alt="До уборки">
+                <img src="https://via.placeholder.com/200x150?text=После" alt="После уборки">
+                <img src="https://via.placeholder.com/200x150?text=До" alt="До уборки">
+                <img src="https://via.placeholder.com/200x150?text=После" alt="После уборки">
+            </div>
+        </div>
+
+        <div class="reviews">
+            <h2>Отзывы</h2>
+            <div class="review-item">⭐⭐⭐⭐⭐ "Дом сияет, спасибо Cleanko!" — Дилфуза</div>
+            <div class="review-item">⭐⭐⭐⭐ "Быстро и чисто, рекомендую!" — Азиз</div>
+        </div>
+
+        <button class="contact-btn" onclick="tg.openTelegramLink('https://t.me/CleankoSupport')">Связаться с нами</button>
+    </div>
+    <script>
+        let tg = window.Telegram?.WebApp || {};
+        tg.expand = tg.expand || function() {};
+
+        let selectedServiceData = { name: '', price: 0 };
+        let totalCost = 0;
+
+        function selectService(serviceName, price) {
+            selectedServiceData.name = serviceName;
+            selectedServiceData.price = price;
+            totalCost = price;
+            document.querySelectorAll('.service-item').forEach(item => item.classList.remove('selected'));
+            event.currentTarget.parentElement.classList.add('selected');
+            document.getElementById('selectedService').textContent = `${serviceName} (${price.toLocaleString()} сум)`;
+            const orderForm = document.getElementById('orderForm');
+            orderForm.style.display = 'block';
+            orderForm.classList.add('visible');
+            orderForm.scrollIntoView({ behavior: 'smooth' });
+            updateTotal();
+            tg.MainButton?.setText('Подтвердить заказ');
+            tg.MainButton?.setParams({ color: '#00aaff', text_color: '#fff' });
+            tg.MainButton?.show();
+        }
+
+        function cancelOrder() {
+            const orderForm = document.getElementById('orderForm');
+            orderForm.classList.remove('visible');
+            setTimeout(() => orderForm.style.display = 'none', 400);
+            document.querySelectorAll('.service-item').forEach(item => item.classList.remove('selected'));
+            totalCost = 0;
+            updateTotal();
+            tg.MainButton?.hide();
+        }
+
+        function updateTotal() {
+            let extraCost = 0;
+            document.querySelectorAll('.extra:checked').forEach(extra => {
+                extraCost += parseInt(extra.getAttribute('data-price'));
+            });
+            const area = parseInt(document.getElementById

@@ -19,7 +19,7 @@
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #e6f0fa 0%, #f9fafc 100%);
+            background: var(--tg-theme-bg-color);
             color: var(--tg-theme-text-color);
             overflow-x: hidden;
         }
@@ -38,38 +38,23 @@
             animation: fadeIn 1s ease-in;
         }
         h2 {
-            font-size: 26px;
-            margin: 30px 0 20px;
+            font-size: 22px;
+            margin: 20px 0 10px;
             color: var(--tg-theme-text-color);
         }
-        .services {
-            margin-bottom: 40px;
-        }
-        .service-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-        .service-item {
-            background: var(--tg-theme-bg-color);
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        .banner {
+            background: linear-gradient(45deg, #34c759, #28a745);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #fff;
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
         }
-        .service-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-        }
-        .service-item.selected {
-            background: linear-gradient(45deg, var(--tg-theme-button-color), #007acc);
-            color: var(--tg-theme-button-text-color);
-        }
-        .service-item::before {
+        .banner::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -80,40 +65,77 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        .service-item:hover::before {
+        .banner:hover::before {
             opacity: 1;
         }
-        .icon {
-            font-size: 40px;
+        .banner-text h3 {
+            font-size: 18px;
+            margin: 0 0 5px;
+        }
+        .banner-text p {
+            font-size: 14px;
+            margin: 0;
+            opacity: 0.8;
+        }
+        .banner button {
+            background: #fff;
+            color: #28a745;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .banner button:hover {
+            transform: scale(1.05);
+        }
+        .services {
+            margin-bottom: 40px;
+        }
+        .service-columns {
+            display: flex;
+            gap: 20px;
+        }
+        .service-column {
+            flex: 1;
+        }
+        .service-item {
+            background: var(--tg-theme-bg-color);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 15px;
-            animation: bounceIn 0.5s ease;
+        }
+        .service-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
         .service-item h3 {
-            font-size: 22px;
-            margin: 0 0 10px;
+            font-size: 18px;
+            margin: 0 0 5px;
         }
         .service-item p {
             font-size: 16px;
-            color: var(--tg-theme-hint-color);
-            margin: 0 0 15px;
+            color: var(--accent-color);
+            margin: 0 0 10px;
         }
-        button {
-            background: linear-gradient(45deg, var(--tg-theme-button-color), #007acc);
-            color: var(--tg-theme-button-text-color);
+        .service-item button {
+            background: linear-gradient(45deg, #34c759, #28a745);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
             transition: transform 0.2s;
         }
-        button:hover {
+        .service-item button:hover {
             transform: scale(1.05);
-        }
-        button:active {
-            transform: scale(0.95);
         }
         .order-form {
             background: var(--tg-theme-bg-color);
@@ -224,36 +246,73 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Cleanko</h1>
+        <div class="banner">
+            <div class="banner-text">
+                <h3>Скидка 10% на первую уборку!</h3>
+                <p>Закажите прямо сейчас и сэкономьте</p>
+            </div>
+            <button onclick="selectService('Первая уборка', 0, 'discount')">Заказать со скидкой</button>
+        </div>
         <div class="services">
-            <h2>Выберите услугу</h2>
-            <div class="service-list">
-                <div class="service-item">
-                    <span class="icon">🧹</span>
-                    <h3>Генеральная уборка</h3>
-                    <p>От 600 000 сум</p>
-                    <button onclick="selectService('Генеральная уборка', 600000)">Выбрать</button>
+            <div class="service-columns">
+                <div class="service-column">
+                    <h2>Генеральная уборка</h2>
+                    <div class="service-item">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="Генеральная уборка до 40 м²">
+                        <h3>До 40 м²</h3>
+                        <p>600 000 сум</p>
+                        <button onclick="selectService('Генеральная уборка До 40 м²', 600000)">Выбрать</button>
+                    </div>
+                    <div class="service-item">
+                        <img src="https://images.pexels.com/photos/4107286/pexels-photo-4107286.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="1 комната">
+                        <h3>1 комната</h3>
+                        <p>700 000 сум</p>
+                        <button onclick="selectService('Генеральная уборка 1 комната', 700000)">Выбрать</button>
+                    </div>
+                    <div class="service-item">
+                        <img src="https://images.unsplash.com/photo-1581578735769-4d91b6c1d48f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="2 комнаты">
+                        <h3>2 комнаты</h3>
+                        <p>900 000 сум</p>
+                        <button onclick="selectService('Генеральная уборка 2 комнаты', 900000)">Выбрать</button>
+                    </div>
+                    <div class="service-item">
+                        <img src="https://images.pexels.com/photos/6237929/pexels-photo-6237929.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="3 комнаты">
+                        <h3>3 комнаты</h3>
+                        <p>1 200 000 сум</p>
+                        <button onclick="selectService('Генеральная уборка 3 комнаты', 1200000)">Выбрать</button>
+                    </div>
                 </div>
-                <div class="service-item">
-                    <span class="icon">🧼</span>
-                    <h3>Поддерживающая уборка</h3>
-                    <p>От 400 000 сум</p>
-                    <button onclick="selectService('Поддерживающая уборка', 400000)">Выбрать</button>
-                </div>
-                <div class="service-item">
-                    <span class="icon">🪟</span>
-                    <h3>Мытье окон</h3>
-                    <p>От 100 000 сум</p>
-                    <button onclick="selectService('Мытье окон', 100000)">Выбрать</button>
+                <div class="service-column">
+                    <h2>Поддерживающая уборка</h2>
+                    <div class="service-item">
+                        <img src="https://images.pexels.com/photos/4107118/pexels-photo-4107118.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="Поддерживающая уборка до 40 м²">
+                        <h3>До 40 м²</h3>
+                        <p>400 000 сум</p>
+                        <button onclick="selectService('Поддерживающая уборка До 40 м²', 400000)">Выбрать</button>
+                    </div>
+                    <div class="service-item">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="1 комната">
+                        <h3>1 комната</h3>
+                        <p>500 000 сум</p>
+                        <button onclick="selectService('Поддерживающая уборка 1 комната', 500000)">Выбрать</button>
+                    </div>
+                    <div class="service-item">
+                        <img src="https://images.pexels.com/photos/6237929/pexels-photo-6237929.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="2 комнаты">
+                        <h3>2 комнаты</h3>
+                        <p>600 000 сум</p>
+                        <button onclick="selectService('Поддерживающая уборка 2 комнаты', 600000)">Выбрать</button>
+                    </div>
+                    <div class="service-item">
+                        <img src="https://images.unsplash.com/photo-1581578735769-4d91b6c1d48f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="3 комнаты">
+                        <h3>3 комнаты</h3>
+                        <p>800 000 сум</p>
+                        <button onclick="selectService('Поддерживающая уборка 3 комнаты', 800000)">Выбрать</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,10 +323,6 @@
                 <div class="form-group">
                     <label>Выбранная услуга:</label>
                     <span id="selectedService"></span>
-                </div>
-                <div class="form-group">
-                    <label for="area">Площадь (м²):</label>
-                    <input type="number" id="area" min="10" placeholder="Введите площадь" required>
                 </div>
                 <div class="form-group">
                     <label for="date">Дата уборки:</label>
@@ -307,10 +362,10 @@
         <div class="gallery">
             <h2>Наши работы</h2>
             <div>
-                <img src="https://via.placeholder.com/200x150?text=До" alt="До уборки">
-                <img src="https://via.placeholder.com/200x150?text=После" alt="После уборки">
-                <img src="https://via.placeholder.com/200x150?text=До" alt="До уборки">
-                <img src="https://via.placeholder.com/200x150?text=После" alt="После уборки">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=150&q=80" alt="До уборки">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=150&q=80" alt="После уборки">
+                <img src="https://images.pexels.com/photos/4107286/pexels-photo-4107286.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1" alt="До уборки">
+                <img src="https://images.pexels.com/photos/4107118/pexels-photo-4107118.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1" alt="После уборки">
             </div>
         </div>
 
@@ -326,15 +381,14 @@
         let tg = window.Telegram?.WebApp || {};
         tg.expand = tg.expand || function() {};
 
-        let selectedServiceData = { name: '', price: 0 };
+        let selectedServiceData = { name: '', price: 0, discount: false };
         let totalCost = 0;
 
-        function selectService(serviceName, price) {
+        function selectService(serviceName, price, discount = false) {
             selectedServiceData.name = serviceName;
             selectedServiceData.price = price;
+            selectedServiceData.discount = discount;
             totalCost = price;
-            document.querySelectorAll('.service-item').forEach(item => item.classList.remove('selected'));
-            event.currentTarget.parentElement.classList.add('selected');
             document.getElementById('selectedService').textContent = `${serviceName} (${price.toLocaleString()} сум)`;
             const orderForm = document.getElementById('orderForm');
             orderForm.style.display = 'block';
@@ -350,7 +404,6 @@
             const orderForm = document.getElementById('orderForm');
             orderForm.classList.remove('visible');
             setTimeout(() => orderForm.style.display = 'none', 400);
-            document.querySelectorAll('.service-item').forEach(item => item.classList.remove('selected'));
             totalCost = 0;
             updateTotal();
             tg.MainButton?.hide();
@@ -361,4 +414,44 @@
             document.querySelectorAll('.extra:checked').forEach(extra => {
                 extraCost += parseInt(extra.getAttribute('data-price'));
             });
-            const area = parseInt(document.getElementById
+            totalCost = selectedServiceData.price + extraCost;
+            if (selectedServiceData.discount) {
+                totalCost = Math.round(totalCost * 0.9); // Скидка 10%
+            }
+            document.getElementById('totalCost').textContent = `Итого: ${totalCost.toLocaleString()} сум`;
+        }
+
+        document.getElementById('cleaningForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const orderData = {
+                service: selectedServiceData.name,
+                price: selectedServiceData.price,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                address: document.getElementById('address').value.trim(),
+                extras: Array.from(document.querySelectorAll('.extra:checked')).map(e => e.previousElementSibling.textContent),
+                total: totalCost,
+                discount: selectedServiceData.discount ? '10% на первую уборку' : 'Нет'
+            };
+            if (!orderData.date || !orderData.time || !orderData.address) {
+                tg.showAlert?.('Заполните все поля!') || alert('Заполните все поля!');
+                return;
+            }
+            console.log('Заказ:', orderData); // Для теста в консоли
+            tg.MainButton?.setText('Отправка...');
+            tg.MainButton?.showSpinner(true);
+            tg.sendData?.(JSON.stringify(orderData));
+            tg.showAlert?.('Заказ отправлен! Скоро с вами свяжутся.') || alert('Заказ отправлен!');
+            setTimeout(() => tg.close?.(), 1500);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').min = today;
+            document.querySelectorAll('.extra').forEach(extra => {
+                extra.addEventListener('change', updateTotal);
+            });
+        });
+    </script>
+</body>
+</html>

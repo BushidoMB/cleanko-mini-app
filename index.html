@@ -7,43 +7,84 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --tg-theme-bg-color: #f9fafc;
+            --tg-theme-bg-color: #fff5e6;
             --tg-theme-text-color: #1a2b3c;
             --tg-theme-button-color: #00aaff;
             --tg-theme-button-text-color: #fff;
             --tg-theme-hint-color: #7a8b9a;
             --tg-theme-secondary-bg-color: #e6f0fa;
             --accent-color: #ff6f61;
+            --why-us-icon-color: #34c759;
         }
         body {
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 0;
-            background: var(--tg-theme-bg-color);
+            background: linear-gradient(to bottom, #fff5e6, #ffffff);
             color: var(--tg-theme-text-color);
             overflow-x: hidden;
+            font-weight: 400;
         }
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
-        h1 {
-            font-size: 36px;
+        .header {
             text-align: center;
-            background: linear-gradient(45deg, var(--tg-theme-button-color), #007acc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 20px 0;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #ffffff, #f5faff);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
             animation: fadeIn 1s ease-in;
+        }
+        .slogan {
+            font-size: 16px;
+            color: var(--accent-color);
+            margin: 0;
+        }
+        .language-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .language-toggle button {
+            background: #34c759;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .language-toggle button:hover {
+            transform: scale(1.05);
         }
         h2 {
             font-size: 22px;
             margin: 20px 0 10px;
             color: var(--tg-theme-text-color);
+            font-weight: 600;
+        }
+        .divider {
+            height: 2px;
+            background: linear-gradient(to right, #ffffff, #34c759, #ffffff);
+            margin: 20px 0;
         }
         .banner {
-            background: linear-gradient(45deg, #34c759, #28a745);
+            background: linear-gradient(45deg, #34c759, #ffd700);
             padding: 20px;
             border-radius: 15px;
             display: flex;
@@ -53,6 +94,8 @@
             color: #fff;
             position: relative;
             overflow: hidden;
+            animation: fadeIn 1s ease-in;
+            opacity: 0.95;
         }
         .banner::before {
             content: '';
@@ -76,6 +119,11 @@
             font-size: 14px;
             margin: 0;
             opacity: 0.8;
+        }
+        .banner-text .timer {
+            font-size: 14px;
+            margin-top: 5px;
+            font-weight: bold;
         }
         .banner button {
             background: #fff;
@@ -101,12 +149,18 @@
             flex: 1;
         }
         .service-item {
-            background: var(--tg-theme-bg-color);
+            background: linear-gradient(to bottom, #ffffff, #fffbe5);
             padding: 15px;
             border-radius: 15px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
         .service-item img {
             width: 100%;
@@ -118,6 +172,27 @@
         .service-item h3 {
             font-size: 18px;
             margin: 0 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .service-item h3::before {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .service-item.general h3::before {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2921/2921844.png');
+        }
+        .service-item.repair h3::before {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2921/2921844.png');
+        }
+        .service-item.furniture h3::before {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2921/2921844.png');
         }
         .service-item p {
             font-size: 16px;
@@ -138,7 +213,7 @@
             transform: scale(1.05);
         }
         .order-form {
-            background: var(--tg-theme-bg-color);
+            background: linear-gradient(to bottom, #ffffff, #fffbe5);
             padding: 25px;
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -161,7 +236,7 @@
             color: var(--tg-theme-hint-color);
             margin-bottom: 8px;
         }
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 12px;
             border: none;
@@ -171,7 +246,7 @@
             color: var(--tg-theme-text-color);
             transition: box-shadow 0.2s;
         }
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             box-shadow: 0 0 8px rgba(0, 170, 255, 0.5);
         }
@@ -197,11 +272,29 @@
             margin: 20px 0;
             color: var(--accent-color);
         }
+        .calculate-btn {
+            background: linear-gradient(45deg, #00aaff, #007acc);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        .calculate-btn:hover {
+            transform: scale(1.05);
+        }
         .submit-btn {
             width: 100%;
             padding: 15px;
             font-size: 18px;
             background: linear-gradient(45deg, var(--tg-theme-button-color), var(--accent-color));
+            transition: transform 0.2s;
+        }
+        .submit-btn:hover {
+            transform: scale(0.95);
         }
         .cancel-btn {
             width: 100%;
@@ -210,28 +303,93 @@
             background: linear-gradient(45deg, #d1d5db, #9ca3af);
             color: var(--tg-theme-text-color);
             margin-top: 15px;
+            transition: transform 0.2s;
+        }
+        .cancel-btn:hover {
+            transform: scale(0.95);
         }
         .gallery {
+            margin-bottom: 40px;
+        }
+        .gallery-container {
             display: flex;
             overflow-x: auto;
             gap: 15px;
             padding-bottom: 20px;
         }
-        .gallery img {
+        .gallery-item {
+            position: relative;
             width: 200px;
             height: 150px;
-            object-fit: cover;
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease;
+        }
+        .gallery-item img.after {
+            opacity: 0;
+        }
+        .gallery-item:hover img.after {
+            opacity: 1;
+        }
+        .gallery-item:hover img.before {
+            opacity: 0;
         }
         .reviews {
             margin-bottom: 40px;
         }
         .review-item {
-            background: var(--tg-theme-secondary-bg-color);
+            background: linear-gradient(to bottom, #ffffff, #fffbe5);
             padding: 15px;
             border-radius: 15px;
             margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .why-us {
+            margin-bottom: 40px;
+        }
+        .why-us-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(to bottom, #ffffff, #fffbe5);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .why-us-item img {
+            width: 30px;
+            height: 30px;
+        }
+        .why-us-item p {
+            margin: 0;
+            font-size: 16px;
+        }
+        .about-us, .contact {
+            margin-bottom: 40px;
+            background: linear-gradient(to bottom, #ffffff, #fffbe5);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .about-us p, .contact p {
+            margin: 0 0 15px;
+            font-size: 16px;
+        }
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
         .contact-btn {
             background: linear-gradient(45deg, #34c759, #28a745);
@@ -239,6 +397,21 @@
             padding: 15px;
             font-size: 18px;
             margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .contact-btn:hover {
+            transform: scale(0.95);
+        }
+        .feedback-btn {
+            background: linear-gradient(45deg, #ff6f61, #ff3d00);
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .feedback-btn:hover {
+            transform: scale(0.95);
         }
 
         /* Анимации */
@@ -246,136 +419,217 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        @keyframes bubble {
+            0% { transform: translateY(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+        .bubble {
+            position: fixed;
+            bottom: 0;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #e6f0fa, #ffffff);
+            border-radius: 50%;
+            animation: bubble 5s infinite;
+        }
+        .bubble:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .bubble:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .bubble:nth-child(3) { left: 90%; animation-delay: 2s; }
+        .bubble:nth-child(4) { left: 80%; animation-delay: 3s; }
     </style>
 </head>
 <body>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
     <div class="container">
-        <h1>Cleanko</h1>
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/logo_final.png" alt="Cleanko Logo" class="logo">
+            <p class="slogan">Tozalikda baraka bor!</p>
+            <div class="language-toggle">
+                <button onclick="switchLanguage('ru')">Русский</button>
+                <button onclick="switchLanguage('uz')">Oʻzbekcha</button>
+            </div>
+        </div>
         <div class="banner">
             <div class="banner-text">
-                <h3>Скидка 10% на первую уборку!</h3>
-                <p>Закажите прямо сейчас и сэкономьте</p>
+                <h3 data-ru="Скидка 10% на первую уборку!" data-uz="Birinchi tozalashga 10% chegirma!">Скидка 10% на первую уборку!</h3>
+                <p data-ru="Закажите прямо сейчас и сэкономьте" data-uz="Hozir buyurtma bering va tejang">Закажите прямо сейчас и сэкономьте</p>
+                <p class="timer" id="timer"></p>
             </div>
-            <button onclick="selectService('Первая уборка', 0, 'discount')">Заказать со скидкой</button>
+            <button onclick="selectService('Первая уборка', 0, 'discount')" data-ru="Заказать со скидкой" data-uz="Chegirma bilan buyurtma qilish">Заказать со скидкой</button>
         </div>
         <div class="services">
-            <div class="service-columns">
-                <div class="service-column">
-                    <h2>Генеральная уборка</h2>
-                    <div class="service-item">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="Генеральная уборка до 40 м²">
-                        <h3>До 40 м²</h3>
-                        <p>600 000 сум</p>
-                        <button onclick="selectService('Генеральная уборка До 40 м²', 600000)">Выбрать</button>
-                    </div>
-                    <div class="service-item">
-                        <img src="https://images.pexels.com/photos/4107286/pexels-photo-4107286.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="1 комната">
-                        <h3>1 комната</h3>
-                        <p>700 000 сум</p>
-                        <button onclick="selectService('Генеральная уборка 1 комната', 700000)">Выбрать</button>
-                    </div>
-                    <div class="service-item">
-                        <img src="https://images.unsplash.com/photo-1581578735769-4d91b6c1d48f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="2 комнаты">
-                        <h3>2 комнаты</h3>
-                        <p>900 000 сум</p>
-                        <button onclick="selectService('Генеральная уборка 2 комнаты', 900000)">Выбрать</button>
-                    </div>
-                    <div class="service-item">
-                        <img src="https://images.pexels.com/photos/6237929/pexels-photo-6237929.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="3 комнаты">
-                        <h3>3 комнаты</h3>
-                        <p>1 200 000 сум</p>
-                        <button onclick="selectService('Генеральная уборка 3 комнаты', 1200000)">Выбрать</button>
-                    </div>
+            <div class="service-column">
+                <h2 data-ru="Генеральная уборка" data-uz="Umumiy tozalash">Генеральная уборка</h2>
+                <div class="service-item general">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/general_cleaning.jpg" alt="Генеральная уборка до 40 м²">
+                    <h3 data-ru="До 40 м²" data-uz="40 m² gacha">До 40 м²</h3>
+                    <p>600 000 сум</p>
+                    <button onclick="selectService('Генеральная уборка До 40 м²', 600000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
                 </div>
-                <div class="service-column">
-                    <h2>Поддерживающая уборка</h2>
-                    <div class="service-item">
-                        <img src="https://images.pexels.com/photos/4107118/pexels-photo-4107118.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="Поддерживающая уборка до 40 м²">
-                        <h3>До 40 м²</h3>
-                        <p>400 000 сум</p>
-                        <button onclick="selectService('Поддерживающая уборка До 40 м²', 400000)">Выбрать</button>
-                    </div>
-                    <div class="service-item">
-                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="1 комната">
-                        <h3>1 комната</h3>
-                        <p>500 000 сум</p>
-                        <button onclick="selectService('Поддерживающая уборка 1 комната', 500000)">Выбрать</button>
-                    </div>
-                    <div class="service-item">
-                        <img src="https://images.pexels.com/photos/6237929/pexels-photo-6237929.jpeg?auto=compress&cs=tinysrgb&w=300&h=150&dpr=1" alt="2 комнаты">
-                        <h3>2 комнаты</h3>
-                        <p>600 000 сум</p>
-                        <button onclick="selectService('Поддерживающая уборка 2 комнаты', 600000)">Выбрать</button>
-                    </div>
-                    <div class="service-item">
-                        <img src="https://images.unsplash.com/photo-1581578735769-4d91b6c1d48f?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=150&q=80" alt="3 комнаты">
-                        <h3>3 комнаты</h3>
-                        <p>800 000 сум</p>
-                        <button onclick="selectService('Поддерживающая уборка 3 комнаты', 800000)">Выбрать</button>
-                    </div>
+                <div class="service-item general">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/general_cleaning.jpg" alt="Генеральная уборка 1 комната">
+                    <h3 data-ru="1 комната" data-uz="1 xona">1 комната</h3>
+                    <p>700 000 сум</p>
+                    <button onclick="selectService('Генеральная уборка 1 комната', 700000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item general">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/general_cleaning.jpg" alt="Генеральная уборка 2 комнаты">
+                    <h3 data-ru="2 комнаты" data-uz="2 xona">2 комнаты</h3>
+                    <p>900 000 сум</p>
+                    <button onclick="selectService('Генеральная уборка 2 комнаты', 900000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item general">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/general_cleaning.jpg" alt="Генеральная уборка 3 комнаты">
+                    <h3 data-ru="3 комнаты" data-uz="3 xona">3 комнаты</h3>
+                    <p>1 200 000 сум</p>
+                    <button onclick="selectService('Генеральная уборка 3 комнаты', 1200000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+            </div>
+            <div class="service-column">
+                <h2 data-ru="Уборка после ремонта" data-uz="Ta'mirdan keyin tozalash">Уборка после ремонта</h2>
+                <div class="service-item repair">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/post_repair_cleaning.jpg" alt="Уборка после ремонта до 40 м²">
+                    <h3 data-ru="До 40 м²" data-uz="40 m² gacha">До 40 м²</h3>
+                    <p>2 000 000 сум</p>
+                    <button onclick="selectService('Уборка после ремонта До 40 м²', 2000000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item repair">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/post_repair_cleaning.jpg" alt="Уборка после ремонта 1 комната">
+                    <h3 data-ru="1 комната" data-uz="1 xona">1 комната</h3>
+                    <p>2 500 000 сум</p>
+                    <button onclick="selectService('Уборка после ремонта 1 комната', 2500000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item repair">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/post_repair_cleaning.jpg" alt="Уборка после ремонта 2 комнаты">
+                    <h3 data-ru="2 комнаты" data-uz="2 xona">2 комнаты</h3>
+                    <p>3 000 000 сум</p>
+                    <button onclick="selectService('Уборка после ремонта 2 комнаты', 3000000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item repair">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/post_repair_cleaning.jpg" alt="Уборка после ремонта 3 комнаты">
+                    <h3 data-ru="3 комнаты" data-uz="3 xona">3 комнаты</h3>
+                    <p>4 000 000 сум</p>
+                    <button onclick="selectService('Уборка после ремонта 3 комнаты', 4000000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+            </div>
+            <div class="service-column">
+                <h2 data-ru="Химчистка мебели" data-uz="Mebel kimyoviy tozalash">Химчистка мебели</h2>
+                <div class="service-item furniture">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/furniture_cleaning.jpg" alt="Химчистка дивана">
+                    <h3 data-ru="Диван" data-uz="Divan">Диван</h3>
+                    <p>200 000 сум</p>
+                    <button onclick="selectService('Химчистка дивана', 200000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item furniture">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/furniture_cleaning.jpg" alt="Химчистка кресла">
+                    <h3 data-ru="Кресло" data-uz="Kreslo">Кресло</h3>
+                    <p>100 000 сум</p>
+                    <button onclick="selectService('Химчистка кресла', 100000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
+                </div>
+                <div class="service-item furniture">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/furniture_cleaning.jpg" alt="Химчистка ковра">
+                    <h3 data-ru="Ковёр (за м²)" data-uz="Gilam (m² uchun)">Ковёр (за м²)</h3>
+                    <p>15 000 сум</p>
+                    <button onclick="selectService('Химчистка ковра', 15000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
                 </div>
             </div>
         </div>
 
         <div class="order-form" id="orderForm">
-            <h2>Оформить заказ</h2>
+            <h2 data-ru="Оформить заказ" data-uz="Buyurtma berish">Оформить заказ</h2>
             <form id="cleaningForm">
                 <div class="form-group">
-                    <label>Выбранная услуга:</label>
+                    <label data-ru="Выбранная услуга:" data-uz="Tanlangan xizmat:">Выбранная услуга:</label>
                     <span id="selectedService"></span>
                 </div>
+                <div class="form-group" id="areaInput" style="display: none;">
+                    <label for="area" data-ru="Площадь (м²):" data-uz="Maydoni (m²):">Площадь (м²):</label>
+                    <input type="number" id="area" min="1" placeholder="Введите площадь">
+                </div>
+                <div class="form-group" id="windowsInput" style="display: none;">
+                    <label for="windows" data-ru="Количество окон:" data-uz="Derazalar soni:">Количество окон:</label>
+                    <input type="number" id="windows" min="0" value="0">
+                </div>
                 <div class="form-group">
-                    <label for="date">Дата уборки:</label>
+                    <label for="date" data-ru="Дата уборки:" data-uz="Tozalash sanasi:">Дата уборки:</label>
                     <input type="date" id="date" required>
                 </div>
                 <div class="form-group">
-                    <label for="time">Время:</label>
+                    <label for="time" data-ru="Время:" data-uz="Vaqt:">Время:</label>
                     <input type="time" id="time" required>
                 </div>
                 <div class="form-group">
-                    <label for="address">Адрес:</label>
+                    <label for="address" data-ru="Адрес:" data-uz="Manzil:">Адрес:</label>
                     <textarea id="address" required placeholder="Введите адрес в Ташкенте..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Дополнительные услуги:</label>
+                    <label data-ru="Дополнительные услуги:" data-uz="Qo'shimcha xizmatlar:">Дополнительные услуги:</label>
                     <div class="extras">
                         <div class="extra-item">
-                            <span>Химчистка мебели (+200 000 сум)</span>
-                            <input type="checkbox" class="extra" data-price="200000">
-                        </div>
-                        <div class="extra-item">
-                            <span>Мытье холодильника (+100 000 сум)</span>
+                            <span data-ru="Мытье холодильника (+100 000 сум)" data-uz="Muzlatgichni yuvish (+100 000 soʻm)">Мытье холодильника (+100 000 сум)</span>
                             <input type="checkbox" class="extra" data-price="100000">
                         </div>
                         <div class="extra-item">
-                            <span>Глажка белья (+150 000 сум)</span>
+                            <span data-ru="Глажка белья (+150 000 сум)" data-uz="Kir yuvish va dazmollash (+150 000 soʻm)">Глажка белья (+150 000 сум)</span>
                             <input type="checkbox" class="extra" data-price="150000">
                         </div>
                     </div>
                 </div>
                 <div class="total" id="totalCost">Итого: 0 сум</div>
-                <button type="submit" class="submit-btn">Заказать</button>
-                <button type="button" class="cancel-btn" onclick="cancelOrder()">Отмена</button>
+                <button type="submit" class="submit-btn" data-ru="Заказать" data-uz="Buyurtma berish">Заказать</button>
+                <button type="button" class="cancel-btn" onclick="cancelOrder()" data-ru="Отмена" data-uz="Bekor qilish">Отмена</button>
             </form>
         </div>
 
         <div class="gallery">
-            <h2>Наши работы</h2>
-            <div>
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=150&q=80" alt="До уборки">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&h=150&q=80" alt="После уборки">
-                <img src="https://images.pexels.com/photos/4107286/pexels-photo-4107286.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1" alt="До уборки">
-                <img src="https://images.pexels.com/photos/4107118/pexels-photo-4107118.jpeg?auto=compress&cs=tinysrgb&w=200&h=150&dpr=1" alt="После уборки">
+            <h2 data-ru="Наши работы" data-uz="Bizning ishlarimiz">Наши работы</h2>
+            <div class="gallery-container">
+                <div class="gallery-item">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/repair_before.jpg" alt="До уборки" class="before">
+                    <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/repair_after.jpg" alt="После уборки" class="after">
+                </div>
             </div>
         </div>
 
         <div class="reviews">
-            <h2>Отзывы</h2>
-            <div class="review-item">⭐⭐⭐⭐⭐ "Дом сияет, спасибо Cleanko!" — Дилфуза</div>
-            <div class="review-item">⭐⭐⭐⭐ "Быстро и чисто, рекомендую!" — Азиз</div>
+            <h2 data-ru="Отзывы" data-uz="Fikrlar">Отзывы</h2>
+            <div class="review-item">⭐⭐⭐⭐⭐ <span data-ru="Дом сияет, спасибо Cleanko!" data-uz="Uy yaltirab turibdi, Cleanko rahmat!">"Дом сияет, спасибо Cleanko!"</span> — Дилфуза</div>
+            <div class="review-item">⭐⭐⭐⭐ <span data-ru="Быстро и чисто, рекомендую!" data-uz="Tez va toza, tavsiya qilaman!">"Быстро и чисто, рекомендую!"</span> — Азиз</div>
         </div>
 
-        <button class="contact-btn" onclick="tg.openTelegramLink('https://t.me/CleankoSupport')">Связаться с нами</button>
+        <div class="why-us">
+            <h2 data-ru="Почему выбирают нас" data-uz="Nega bizni tanlashadi">Почему выбирают нас</h2>
+            <div class="why-us-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Гарантия">
+                <p data-ru="Гарантия чистоты или вернём деньги!" data-uz="Tozalik kafolati yoki pulingizni qaytaramiz!">Гарантия чистоты или вернём деньги!</p>
+            </div>
+            <div class="why-us-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/188/188335.png" alt="Эко-средства">
+                <p data-ru="Эко-средства — безопасно для детей!" data-uz="Eko vositalar — bolalar uchun xavfsiz!">Эко-средства — безопасно для детей!</p>
+            </div>
+            <div class="why-us-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/109/109614.png" alt="Быстро">
+                <p data-ru="Быстрая уборка — от 2 часов!" data-uz="Tez tozalash — 2 soatdan boshlab!">Быстрая уборка — от 2 часов!</p>
+            </div>
+        </div>
+
+        <div class="about-us">
+            <h2 data-ru="Узнать больше о нас" data-uz="Biz haqimizda ko'proq bilib oling">Узнать больше о нас</h2>
+            <p data-ru="Cleanko — ваш надёжный помощник в уборке! Мы открылись в 2023 году и уже помогли более 1000 довольным клиентам в Ташкенте сделать их дома идеально чистыми. Доверяйте профессионалам — выбирайте Cleanko!" data-uz="Cleanko — tozalash bo'yicha sizning ishonchli yordamchingiz! Biz 2023 yilda ochildik va allaqachon Toshkentda 1000 dan ortiq mamnun mijozlarning uylarini mukammal toza qilib berdik. Professionalarga ishonch qiling — Cleanko'ni tanlang!">Cleanko — ваш надёжный помощник в уборке! Мы открылись в 2023 году и уже помогли более 1000 довольным клиентам в Ташкенте сделать их дома идеально чистыми. Доверяйте профессионалам — выбирайте Cleanko!</p>
+        </div>
+
+        <div class="contact">
+            <h2 data-ru="Контакты" data-uz="Aloqa">Контакты</h2>
+            <p data-ru="Телефон: +998909273929" data-uz="Telefon: +998909273929">Телефон: +998909273929</p>
+            <div class="contact-links">
+                <button class="contact-btn" onclick="tg.openTelegramLink('https://t.me/nolvest')" data-ru="Связаться в Telegram" data-uz="Telegram'da aloqa qilish">Связаться в Telegram</button>
+                <button class="feedback-btn" onclick="tg.openTelegramLink('https://t.me/CleankoSupport')" data-ru="Оставить отзыв" data-uz="Fikr qoldirish">Оставить отзыв</button>
+            </div>
+        </div>
     </div>
     <script>
         let tg = window.Telegram?.WebApp || {};
@@ -383,6 +637,14 @@
 
         let selectedServiceData = { name: '', price: 0, discount: false };
         let totalCost = 0;
+        let language = 'ru';
+
+        function switchLanguage(lang) {
+            language = lang;
+            document.querySelectorAll('[data-ru]').forEach(element => {
+                element.textContent = element.getAttribute(`data-${lang}`);
+            });
+        }
 
         function selectService(serviceName, price, discount = false) {
             selectedServiceData.name = serviceName;
@@ -394,8 +656,22 @@
             orderForm.style.display = 'block';
             orderForm.classList.add('visible');
             orderForm.scrollIntoView({ behavior: 'smooth' });
+
+            const areaInput = document.getElementById('areaInput');
+            const windowsInput = document.getElementById('windowsInput');
+            if (serviceName.includes('Генеральная') || serviceName.includes('Уборка после ремонта')) {
+                areaInput.style.display = 'block';
+                windowsInput.style.display = 'block';
+            } else if (serviceName.includes('Химчистка ковра')) {
+                areaInput.style.display = 'block';
+                windowsInput.style.display = 'none';
+            } else {
+                areaInput.style.display = 'none';
+                windowsInput.style.display = 'none';
+            }
+
             updateTotal();
-            tg.MainButton?.setText('Подтвердить заказ');
+            tg.MainButton?.setText(language === 'ru' ? 'Подтвердить заказ' : 'Buyurtmani tasdiqlash');
             tg.MainButton?.setParams({ color: '#00aaff', text_color: '#fff' });
             tg.MainButton?.show();
         }
@@ -405,7 +681,7 @@
             orderForm.classList.remove('visible');
             setTimeout(() => orderForm.style.display = 'none', 400);
             totalCost = 0;
-            updateTotal();
+            document.getElementById('totalCost').textContent = `Итого: ${totalCost.toLocaleString()} сум`;
             tg.MainButton?.hide();
         }
 
@@ -414,10 +690,30 @@
             document.querySelectorAll('.extra:checked').forEach(extra => {
                 extraCost += parseInt(extra.getAttribute('data-price'));
             });
-            totalCost = selectedServiceData.price + extraCost;
+
+            const areaInput = document.getElementById('area');
+            const area = parseInt(areaInput.value) || 0;
+            const windowsInput = document.getElementById('windows');
+            const windows = parseInt(windowsInput.value) || 0;
+
+            totalCost = selectedServiceData.price;
+            if (area > 0 && (selectedServiceData.name.includes('Генеральная') || selectedServiceData.name.includes('Уборка после ремонта'))) {
+                if (area <= 40) totalCost = selectedServiceData.price;
+                else if (area <= 60) totalCost = 700000; // 1 комната
+                else if (area <= 80) totalCost = 900000; // 2 комнаты
+                else if (area <= 120) totalCost = 1200000; // 3 комнаты
+                else totalCost = 1200000 + (area - 120) * 10000; // Дополнительно 10 000 сум за м² сверх 120
+            } else if (area > 0 && selectedServiceData.name.includes('Химчистка ковра')) {
+                totalCost = area * 15000; // 15 000 сум за м²
+            }
+
+            totalCost += windows * 80000; // 80 000 сум за окно
+            totalCost += extraCost;
+
             if (selectedServiceData.discount) {
                 totalCost = Math.round(totalCost * 0.9); // Скидка 10%
             }
+
             document.getElementById('totalCost').textContent = `Итого: ${totalCost.toLocaleString()} сум`;
         }
 
@@ -426,22 +722,25 @@
             const orderData = {
                 service: selectedServiceData.name,
                 price: selectedServiceData.price,
+                area: document.getElementById('area').value,
+                windows: document.getElementById('windows').value,
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
                 address: document.getElementById('address').value.trim(),
                 extras: Array.from(document.querySelectorAll('.extra:checked')).map(e => e.previousElementSibling.textContent),
                 total: totalCost,
-                discount: selectedServiceData.discount ? '10% на первую уборку' : 'Нет'
+                discount: selectedServiceData.discount ? '10% на первую уборку' : 'Нет',
+                orderId: Math.floor(Math.random() * 10000)
             };
             if (!orderData.date || !orderData.time || !orderData.address) {
-                tg.showAlert?.('Заполните все поля!') || alert('Заполните все поля!');
+                tg.showAlert?.(language === 'ru' ? 'Заполните все поля!' : 'Barcha maydonlarni toʻldiring!') || alert(language === 'ru' ? 'Заполните все поля!' : 'Barcha maydonlarni toʻldiring!');
                 return;
             }
-            console.log('Заказ:', orderData); // Для теста в консоли
-            tg.MainButton?.setText('Отправка...');
+            console.log('Заказ:', orderData);
+            tg.MainButton?.setText(language === 'ru' ? 'Отправка...' : 'Yuborilmoqda...');
             tg.MainButton?.showSpinner(true);
             tg.sendData?.(JSON.stringify(orderData));
-            tg.showAlert?.('Заказ отправлен! Скоро с вами свяжутся.') || alert('Заказ отправлен!');
+            tg.showAlert?.(language === 'ru' ? `Заказ №${orderData.orderId} отправлен! Скоро с вами свяжемся.` : `Buyurtma №${orderData.orderId} yuborildi! Tez orada siz bilan bog'lanamiz.`) || alert(language === 'ru' ? `Заказ №${orderData.orderId} отправлен! Скоро с вами свяжемся.` : `Buyurtma №${orderData.orderId} yuborildi! Tez orada siz bilan bog'lanamiz.`);
             setTimeout(() => tg.close?.(), 1500);
         });
 
@@ -451,6 +750,25 @@
             document.querySelectorAll('.extra').forEach(extra => {
                 extra.addEventListener('change', updateTotal);
             });
+            document.getElementById('area').addEventListener('input', updateTotal);
+            document.getElementById('windows').addEventListener('input', updateTotal);
+
+            // Таймер акции до конца месяца
+            const now = new Date();
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            const timer = setInterval(() => {
+                const now = new Date();
+                const timeLeft = endOfMonth - now;
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    document.getElementById('timer').textContent = language === 'ru' ? 'Акция завершена!' : 'Aksiya tugadi!';
+                    return;
+                }
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('timer').textContent = language === 'ru' ? `Осталось: ${days} дн. ${hours} ч. ${minutes} мин.` : `Qoldi: ${days} kun ${hours} soat ${minutes} daqiqa`;
+            }, 1000);
         });
     </script>
 </body>

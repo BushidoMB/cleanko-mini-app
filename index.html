@@ -7,12 +7,12 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --tg-theme-bg-color: #f5f5f5;
+            --tg-theme-bg-color: #e6f0fa; /* Лёгкий синий фон */
             --tg-theme-text-color: #1a2b3c;
-            --tg-theme-button-color: #34c759;
+            --tg-theme-button-color: #2a9dd9; /* Более тёмный синий для кнопок */
             --tg-theme-button-text-color: #fff;
             --tg-theme-hint-color: #7a8b9a;
-            --tg-theme-secondary-bg-color: #e6f0fa;
+            --tg-theme-secondary-bg-color: #f0f7ff;
             --accent-color: #ff6f61;
             --service-title-color: #6f4e37;
         }
@@ -20,14 +20,35 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: var(--tg-theme-bg-color);
+            background: linear-gradient(135deg, var(--tg-theme-bg-color), #d9e8ff);
             color: var(--tg-theme-text-color);
             overflow-x: hidden;
+            position: relative;
+        }
+        /* Анимация пузырьков */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; top: 20%; animation-duration: 6s; }
+        .bubble:nth-child(2) { width: 60px; height: 60px; left: 30%; top: 50%; animation-duration: 9s; }
+        .bubble:nth-child(3) { width: 30px; height: 30px; left: 70%; top: 30%; animation-duration: 7s; }
+        .bubble:nth-child(4) { width: 50px; height: 50px; left: 50%; top: 80%; animation-duration: 10s; }
+        .bubble:nth-child(5) { width: 20px; height: 20px; left: 90%; top: 10%; animation-duration: 5s; }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.8; }
+            50% { transform: translateY(-100px); opacity: 0.5; }
+            100% { transform: translateY(0); opacity: 0.8; }
         }
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         .header {
             display: flex;
@@ -36,9 +57,10 @@
             margin-bottom: 20px;
         }
         .logo {
-            width: 150px; /* Увеличенный размер логотипа */
+            width: 200px; /* Увеличенный логотип */
             height: auto;
             object-fit: contain;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .header-buttons {
             display: flex;
@@ -179,7 +201,7 @@
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             display: none;
-            opacity: 0; /* Для анимации */
+            opacity: 0;
             transition: opacity 0.3s ease-in-out;
         }
         .order-form.visible {
@@ -279,6 +301,12 @@
         .notification.error {
             background: #ff4444;
         }
+        .reviews .review-item {
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
         @media (max-width: 768px) {
             .services {
                 grid-template-columns: 1fr;
@@ -294,7 +322,7 @@
                 flex-direction: column;
             }
             .logo {
-                width: 100px; /* Адаптация для мобильных */
+                width: 120px; /* Адаптация логотипа для телефона */
             }
         }
         @keyframes fadeIn {
@@ -308,9 +336,16 @@
     </style>
 </head>
 <body>
+    <!-- Пузырьки на фоне -->
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+
     <div class="container">
         <div class="header">
-            <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/logo_final_transparent.png" alt="Cleanko Logo" class="logo" loading="lazy" width="150" height="150">
+            <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/logo_final_transparent.png" alt="Cleanko Logo" class="logo" loading="lazy" width="200" height="200">
             <div class="header-buttons">
                 <button onclick="tg.openTelegramLink('https://t.me/CleankoSupport')" aria-label="Связаться с поддержкой">
                     <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" alt="Support" loading="lazy">
@@ -469,7 +504,12 @@
 
         <div class="reviews">
             <h2 data-ru="Отзывы клиентов" data-uz="Mijozlar fikri">Отзывы клиентов</h2>
-            <div class="review-item" data-ru="Meni ishonchimni oqlashdi. — Rustam, Asalabod" data-uz="Katta rahmat uyni toza qilib tozalab berishdi. — Jafar, 40 let">Meni ishonchimni oqlashdi. — Rustam, Asalabod</div>
+            <div class="review-item" data-ru="Отличная работа! После ремонта квартира сияет чистотой. — Анна, Чиланзар" data-uz="Ajoyib ish! Ta'mirdan keyin kvartiram porloq bo'lib qoldi. — Mohira, Chilanzor">Отличная работа! После ремонта квартира сияет чистотой. — Анна, Чиланзар</div>
+            <div class="review-item" data-ru="Диван как новый после химчистки, спасибо! — Рустам, Юнусабад" data-uz="Divan kimyoviy tozalashdan keyin yangidek bo'ldi, rahmat! — Rustam, Yunusobod">Диван как новый после химчистки, спасибо! — Рустам, Юнусабад</div>
+            <div class="review-item" data-ru="Приехали вовремя, убрали быстро и качественно. — Елена, Мирзо-Улугбек" data-uz="Vaqtida kelishdi, tez va sifatli tozalashdi. — Dilshod, Mirzo Ulug'bek">Приехали вовремя, убрали быстро и качественно. — Елена, Мирзо-Улугбек</div>
+            <div class="review-item" data-ru="Очень удобно заказывать через Telegram, рекомендую! — Игорь, Сергели" data-uz="Telegram orqali buyurtma berish juda qulay, tavsiya qilaman! — Jasur, Sergeli">Очень удобно заказывать через Telegram, рекомендую! — Игорь, Сергели</div>
+            <div class="review-item" data-ru="Ковёр стал чистым и свежим, отличный сервис! — Мария, Яккасарай" data-uz="Gilam toza va yangi bo'lib qoldi, ajoyib xizmat! — Nigora, Yakkasaroy">Ковёр стал чистым и свежим, отличный сервис! — Мария, Яккасарай</div>
+            <div class="review-item" data-ru="Спасибо за тщательную уборку, даже дети заметили разницу! — Алексей, Алмазар" data-uz="Ehtiyotkorlik bilan tozalaganlari uchun rahmat, hatto bolalar farqni payqashdi! — Shaxzod, Olmazor">Спасибо за тщательную уборку, даже дети заметили разницу! — Алексей, Алмазар</div>
         </div>
 
         <div class="faq">
@@ -478,13 +518,41 @@
                 <h3 data-ru="Какие средства для уборки вы используете?" data-uz="Tozalash uchun qanday vositalardan foydalanasiz?">Какие средства для уборки вы используете?</h3>
                 <p data-ru="Мы используем только профессиональные и безопасные средства." data-uz="Biz faqat professional va xavfsiz vositalardan foydalanamiz.">Мы используем только профессиональные и безопасные средства.</p>
             </div>
+            <div class="faq-item">
+                <h3 data-ru="Сколько времени занимает уборка?" data-uz="Tozalash qancha vaqt oladi?">Сколько времени занимает уборка?</h3>
+                <p data-ru="Время зависит от объёма работ, обычно от 2 до 6 часов." data-uz="Vaqt ish hajmiga bog'liq, odatda 2 dan 6 soatgacha.">Время зависит от объёма работ, обычно от 2 до 6 часов.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-ru="Можно ли заказать уборку на выходные?" data-uz="Dam olish kunlarida tozalashga buyurtma berish mumkinmi?">Можно ли заказать уборку на выходные?</h3>
+                <p data-ru="Да, мы работаем 7 дней в неделю с 9:00 до 19:00." data-uz="Ha, biz haftada 7 kun 9:00 dan 19:00 gacha ishlaymiz.">Да, мы работаем 7 дней в неделю с 9:00 до 19:00.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-ru="Что входит в генеральную уборку?" data-uz="Umumiy tozalashga nimalar kiradi?">Что входит в генеральную уборку?</h3>
+                <p data-ru="Пыль, полы, окна, сантехника и многое другое по вашему желанию." data-uz="Chang, pollar, derazalar, sanitariya va sizning xohishingizga ko'ra boshqa narsalar.">Пыль, полы, окна, сантехника и многое другое по вашему желанию.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-ru="Как оплатить заказ?" data-uz="Buyurtmani qanday to'lash mumkin?">Как оплатить заказ?</h3>
+                <p data-ru="Оплата возможна наличными или через Telegram после выполнения." data-uz="To'lov naqd pul yoki Telegram orqali ish tugagandan keyin amalga oshiriladi.">Оплата возможна наличными или через Telegram после выполнения.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-ru="Выезжаете ли вы за пределы Ташкента?" data-uz="Toshkentdan tashqariga chiqasizlarmi?">Выезжаете ли вы за пределы Ташкента?</h3>
+                <p data-ru="Да, но с дополнительной оплатой за выезд." data-uz="Ha, lekin chiqish uchun qo'shimcha haq bilan.">Да, но с дополнительной оплатой за выезд.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-ru="Можно ли заказать уборку срочно?" data-uz="Shoshilinch tozalashga buyurtma berish mumkinmi?">Можно ли заказать уборку срочно?</h3>
+                <p data-ru="Да, если есть свободные бригады, уточняйте по телефону." data-uz="Ha, agar bo'sh brigadalar bo'lsa, telefon orqali aniqlashtiring.">Да, если есть свободные бригады, уточняйте по телефону.</p>
+            </div>
+            <div class="faq-item">
+                <h3 data-ru="Безопасны ли ваши средства для детей и животных?" data-uz="Sizning vositalaringiz bolalar va hayvonlar uchun xavfsizmi?">Безопасны ли ваши средства для детей и животных?</h3>
+                <p data-ru="Да, все средства экологичны и сертифицированы." data-uz="Ha, barcha vositalar ekologik toza va sertifikatlangan.">Да, все средства экологичны и сертифицированы.</p>
+            </div>
         </div>
     </div>
 
     <div class="modal" id="aboutModal">
         <div class="modal-content">
             <h2 data-ru="О нас" data-uz="Biz haqimizda">О нас</h2>
-            <p data-ru="Cleanko — ваш надёжный помощник в уборке! Мы открылись в 2023 году и уже помогли более 1000 довольным клиентам в Ташкенте сделать их дома идеально чистыми. Доверяйте профессионалам — выбирайте Cleanko!" data-uz="Cleanko — tozalash bo'yicha sizning ishonchli yordamchingiz! Biz 2023 yilda ochildik va allaqachon Toshkentda 1000 dan ortiq mamnun mijozlarning uylarini mukammal toza qilib berdik. Professionalarga ishonch qiling — Cleanko'ni tanlang!">Cleanko — ваш надёжный помощник в уборке!</p>
+            <p data-ru="Cleanko — ваш надёжный помощник в уборке! Мы работаем с 2023 года и уже помогли более 1000 довольных клиентов в Ташкенте сделать их дома идеально чистыми. Доверяйте профессионалам — выбирайте Cleanko!" data-uz="Cleanko — tozalash bo'yicha sizning ishonchli yordamchingiz! Biz 2023 yilda ochildik va allaqachon Toshkentda 1000 dan ortiq mamnun mijozlarning uylarini mukammal toza qilib berdik. Professionalarga ishonch qiling — Cleanko'ni tanlang!">Cleanko — ваш надёжный помощник в уборке!</p>
             <button onclick="closeAbout()" data-ru="Закрыть" data-uz="Yopish">Закрыть</button>
         </div>
     </div>

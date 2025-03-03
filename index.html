@@ -36,8 +36,8 @@
             margin-bottom: 20px;
         }
         .logo {
-            max-width: 512px;
-            max-height: 512px;
+            width: 150px; /* Увеличенный размер логотипа */
+            height: auto;
             object-fit: contain;
         }
         .header-buttons {
@@ -179,10 +179,12 @@
             border-radius: 20px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             display: none;
+            opacity: 0; /* Для анимации */
+            transition: opacity 0.3s ease-in-out;
         }
         .order-form.visible {
             display: block;
-            animation: fadeIn 0.4s;
+            opacity: 1;
         }
         .form-group {
             margin-bottom: 20px;
@@ -292,7 +294,7 @@
                 flex-direction: column;
             }
             .logo {
-                max-width: 80px;
+                width: 100px; /* Адаптация для мобильных */
             }
         }
         @keyframes fadeIn {
@@ -308,19 +310,19 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/logo_final_transparent.png" alt="Cleanko Logo" class="logo" loading="lazy">
+            <img src="https://raw.githubusercontent.com/BushidoMB/cleanko-mini-app/main/logo_final_transparent.png" alt="Cleanko Logo" class="logo" loading="lazy" width="150" height="150">
             <div class="header-buttons">
-                <button onclick="tg.openTelegramLink('https://t.me/CleankoSupport')">
+                <button onclick="tg.openTelegramLink('https://t.me/CleankoSupport')" aria-label="Связаться с поддержкой">
                     <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" alt="Support" loading="lazy">
                 </button>
-                <button onclick="showAbout()">
+                <button onclick="showAbout()" aria-label="О нас">
                     <img src="https://cdn-icons-png.flaticon.com/512/2976/2976215.png" alt="Menu" loading="lazy">
                 </button>
             </div>
         </div>
         <div class="language-toggle">
-            <button onclick="switchLanguage('ru')">Русский</button>
-            <button onclick="switchLanguage('uz')">Oʻzbekcha</button>
+            <button onclick="switchLanguage('ru')" aria-label="Русский язык">Русский</button>
+            <button onclick="switchLanguage('uz')" aria-label="Oʻzbekcha">Oʻzbekcha</button>
         </div>
         <div class="banner">
             <div class="banner-text">
@@ -336,63 +338,63 @@
         </div>
         <div class="services" id="services">
             <div class="service-item" data-category="general">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/1%20xona.jpg" alt="Генеральная уборка 1 комната" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/1%20xona.jpg" alt="Генеральная уборка 1 комната" loading="lazy" width="300" height="150">
                 <h3 data-ru="1 комната" data-uz="1 xona">1 комната</h3>
                 <p data-ru="Генеральная уборка" data-uz="Umumiy tozalash">Генеральная уборка</p>
                 <p class="price" data-ru="700 000 сум" data-uz="700 000 soʻm">700 000 сум</p>
                 <button onclick="selectService('Генеральная уборка 1 комната', 700000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="general">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/2%20xona.jpeg" alt="Генеральная уборка 2 комнаты" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/2%20xona.jpeg" alt="Генеральная уборка 2 комнаты" loading="lazy" width="300" height="150">
                 <h3 data-ru="2 комнаты" data-uz="2 xona">2 комнаты</h3>
                 <p data-ru="Генеральная уборка" data-uz="Umumiy tozalash">Генеральная уборка</p>
                 <p class="price" data-ru="900 000 сум" data-uz="900 000 soʻm">900 000 сум</p>
                 <button onclick="selectService('Генеральная уборка 2 комнаты', 900000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="general">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/3%20xona.jpg" alt="Генеральная уборка 3 комнаты" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/3%20xona.jpg" alt="Генеральная уборка 3 комнаты" loading="lazy" width="300" height="150">
                 <h3 data-ru="3 комнаты" data-uz="3 xona">3 комнаты</h3>
                 <p data-ru="Генеральная уборка" data-uz="Umumiy tozalash">Генеральная уборка</p>
                 <p class="price" data-ru="1 200 000 сум" data-uz="1 200 000 soʻm">1 200 000 сум</p>
                 <button onclick="selectService('Генеральная уборка 3 комнаты', 1200000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="post-repair">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%201.jpeg" alt="Уборка после ремонта 1 комната" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%201.jpeg" alt="Уборка после ремонта 1 комната" loading="lazy" width="300" height="150">
                 <h3 data-ru="1 комната" data-uz="1 xona">1 комната</h3>
                 <p data-ru="Уборка после ремонта" data-uz="Ta'mirdan keyin tozalash">Уборка после ремонта</p>
                 <p class="price" data-ru="2 500 000 сум" data-uz="2 500 000 soʻm">2 500 000 сум</p>
                 <button onclick="selectService('Уборка после ремонта 1 комната', 2500000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="post-repair">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%202%20xona.jpeg" alt="Уборка после ремонта 2 комнаты" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%202%20xona.jpeg" alt="Уборка после ремонта 2 комнаты" loading="lazy" width="300" height="150">
                 <h3 data-ru="2 комнаты" data-uz="2 xona">2 комнаты</h3>
                 <p data-ru="Уборка после ремонта" data-uz="Ta'mirdan keyin tozalash">Уборка после ремонта</p>
                 <p class="price" data-ru="3 000 000 сум" data-uz="3 000 000 soʻm">3 000 000 сум</p>
                 <button onclick="selectService('Уборка после ремонта 2 комнаты', 3000000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="post-repair">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%202%20xona.jpeg" alt="Уборка после ремонта 3 комнаты" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%202%20xona.jpeg" alt="Уборка после ремонта 3 комнаты" loading="lazy" width="300" height="150">
                 <h3 data-ru="3 комнаты" data-uz="3 xona">3 комнаты</h3>
                 <p data-ru="Уборка после ремонта" data-uz="Ta'mirdan keyin tozalash">Уборка после ремонта</p>
                 <p class="price" data-ru="4 000 000 сум" data-uz="4 000 000 soʻm">4 000 000 сум</p>
                 <button onclick="selectService('Уборка после ремонта 3 комнаты', 4000000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="furniture">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/divan.jpg" alt="Химчистка дивана" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/divan.jpg" alt="Химчистка дивана" loading="lazy" width="300" height="150">
                 <h3 data-ru="Диван" data-uz="Divan">Диван</h3>
                 <p data-ru="Химчистка мебели" data-uz="Mebel kimyoviy tozalash">Химчистка мебели</p>
                 <p class="price" data-ru="200 000 сум" data-uz="200 000 soʻm">200 000 сум</p>
                 <button onclick="selectService('Химчистка дивана', 200000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="furniture">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/divan.jpg" alt="Химчистка кресла" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/divan.jpg" alt="Химчистка кресла" loading="lazy" width="300" height="150">
                 <h3 data-ru="Кресло" data-uz="Kreslo">Кресло</h3>
                 <p data-ru="Химчистка мебели" data-uz="Mebel kimyoviy tozalash">Химчистка мебели</p>
                 <p class="price" data-ru="100 000 сум" data-uz="100 000 soʻm">100 000 сум</p>
                 <button onclick="selectService('Химчистка кресла', 100000)" data-ru="Выбрать" data-uz="Tanlash">Выбрать</button>
             </div>
             <div class="service-item" data-category="furniture">
-                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/kovrov.jpg" alt="Химчистка ковра" loading="lazy">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/kovrov.jpg" alt="Химчистка ковра" loading="lazy" width="300" height="150">
                 <h3 data-ru="Ковёр (за м²)" data-uz="Gilam (m² uchun)">Ковёр (за м²)</h3>
                 <p data-ru="Химчистка мебели" data-uz="Mebel kimyoviy tozalash">Химчистка мебели</p>
                 <p class="price" data-ru="15 000 сум" data-uz="15 000 soʻm">15 000 сум</p>
@@ -425,7 +427,7 @@
                 </div>
                 <div class="form-group">
                     <label for="address" data-ru="Адрес:" data-uz="Manzil:">Адрес:</label>
-                    <textarea id="address" required placeholder="Введите адрес в Ташкенте..."></textarea>
+                    <textarea id="address" required placeholder="Введите адрес в Ташкенте..." maxlength="200"></textarea>
                 </div>
                 <div class="form-group">
                     <label data-ru="Сохранить адрес?" data-uz="Manzilni saqlash?">Сохранить адрес?</label>
@@ -467,8 +469,7 @@
 
         <div class="reviews">
             <h2 data-ru="Отзывы клиентов" data-uz="Mijozlar fikri">Отзывы клиентов</h2>
-            <div class="review-item" data-ru="Hammaga tavsiya qilaman. — Muslim hoji, Nikitina" data-uz="Katta rahmat uyni toza qilib tozalab berishdi. — Jafar, 40 let">Meni ishonchimni oqlashdi. — Rustam, Asalabod </div>
-            <!-- Добавить слайдер позже -->
+            <div class="review-item" data-ru="Meni ishonchimni oqlashdi. — Rustam, Asalabod" data-uz="Katta rahmat uyni toza qilib tozalab berishdi. — Jafar, 40 let">Meni ishonchimni oqlashdi. — Rustam, Asalabod</div>
         </div>
 
         <div class="faq">
@@ -477,7 +478,6 @@
                 <h3 data-ru="Какие средства для уборки вы используете?" data-uz="Tozalash uchun qanday vositalardan foydalanasiz?">Какие средства для уборки вы используете?</h3>
                 <p data-ru="Мы используем только профессиональные и безопасные средства." data-uz="Biz faqat professional va xavfsiz vositalardan foydalanamiz.">Мы используем только профессиональные и безопасные средства.</p>
             </div>
-            <!-- Добавить аккордеон позже -->
         </div>
     </div>
 
@@ -533,6 +533,8 @@
             document.getElementById('windowsInput').style.display = serviceName.includes('Генеральная') || serviceName.includes('Уборка после ремонта') ? 'block' : 'none';
             updateTotal();
             tg.MainButton.show();
+            const savedAddress = localStorage.getItem(`address_${tg.initDataUnsafe?.user?.id || 'guest'}`);
+            if (savedAddress) document.getElementById('address').value = savedAddress;
         }
 
         function cancelOrder() {
@@ -567,16 +569,39 @@
             setTimeout(() => notification.style.display = 'none', 3000);
         }
 
+        function sanitizeInput(input) {
+            return input.replace(/[<>&"']/g, '');
+        }
+
         document.getElementById('cleaningForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const date = document.getElementById('date').value;
             const time = document.getElementById('time').value;
-            const address = document.getElementById('address').value.trim();
+            const address = sanitizeInput(document.getElementById('address').value.trim());
             const today = new Date().toISOString().split('T')[0];
 
-            if (date < today || time < '09:00' || time > '19:00' || address.length < 10) {
-                showNotification(language === 'ru' ? 'Ошибка: проверьте дату, время или адрес!' : 'Xato: sana, vaqt yoki manzilni tekshiring!', 'error');
+            if (date < today) {
+                showNotification(language === 'ru' ? 'Ошибка: выберите дату не раньше сегодня!' : 'Xato: bugundan oldingi sanani tanlamang!', 'error');
+                document.getElementById('date').classList.add('error');
                 return;
+            } else {
+                document.getElementById('date').classList.remove('error');
+            }
+
+            if (time < '09:00' || time > '19:00') {
+                showNotification(language === 'ru' ? 'Ошибка: выберите время с 09:00 до 19:00!' : 'Xato: 09:00 dan 19:00 gacha vaqtni tanlang!', 'error');
+                document.getElementById('time').classList.add('error');
+                return;
+            } else {
+                document.getElementById('time').classList.remove('error');
+            }
+
+            if (address.length < 10) {
+                showNotification(language === 'ru' ? 'Ошибка: адрес слишком короткий!' : 'Xato: manzil juda qisqa!', 'error');
+                document.getElementById('address').classList.add('error');
+                return;
+            } else {
+                document.getElementById('address').classList.remove('error');
             }
 
             const orderData = {
@@ -593,12 +618,18 @@
             tg.sendData(JSON.stringify(orderData));
             showNotification(language === 'ru' ? `Заказ №${orderData.orderId} отправлен!` : `Buyurtma №${orderData.orderId} yuborildi!`, 'success');
             setTimeout(() => tg.close(), 1500);
+
+            let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            orders.push(orderData);
+            localStorage.setItem('orders', JSON.stringify(orders));
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+            const userLang = tg.initDataUnsafe?.user?.language_code || navigator.language;
+            switchLanguage(userLang.startsWith('uz') ? 'uz' : 'ru');
+
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date').min = today;
-            document.getElementById('address').value = localStorage.getItem(`address_${tg.initDataUnsafe?.user?.id || 'guest'}`) || '';
             document.querySelectorAll('.extra, #area, #windows').forEach(input => input.addEventListener('change', updateTotal));
         });
     </script>

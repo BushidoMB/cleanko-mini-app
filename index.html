@@ -58,10 +58,9 @@
             margin-bottom: 20px;
         }
         .logo {
-            max-width: 250px; /* Большой и прозрачный логотип */
-            height: auto;
+            max-width: 512px; /* Первая версия логотипа */
+            max-height: 512px;
             object-fit: contain;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .header-buttons {
             display: flex;
@@ -308,12 +307,15 @@
         .reviews, .faq {
             overflow: hidden;
             position: relative;
-            height: 150px; /* Высота контейнера */
+            height: 200px; /* Увеличена высота для читаемости */
         }
         .reviews .slider, .faq .slider {
             display: flex;
             flex-direction: column;
-            animation: slide 20s infinite linear;
+            animation: slide 30s linear; /* Один проход за 30 секунд */
+        }
+        .reviews:hover .slider, .faq:hover .slider {
+            animation-play-state: paused; /* Остановка при наведении */
         }
         .reviews .review-item, .faq .faq-item {
             background: #fff;
@@ -341,7 +343,7 @@
                 flex-direction: column;
             }
             .logo {
-                max-width: 150px; /* Адаптация логотипа для телефона */
+                max-width: 80px; /* Адаптация логотипа для телефона */
             }
         }
         @keyframes fadeIn {

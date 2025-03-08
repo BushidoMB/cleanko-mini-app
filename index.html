@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cleanko</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --tg-theme-bg-color: #e6f0fa;
@@ -359,9 +360,259 @@
             from { top: -50px; }
             to { top: 20px; }
         }
+
+        /* Стили для секции статистики */
+        .statistics {
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--tg-theme-secondary-bg-color), var(--tg-theme-bg-color));
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .stats-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-numbers {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            min-width: 200px;
+            transition: transform 0.3s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: var(--tg-theme-hint-color);
+            font-size: 14px;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-number.animate {
+            animation: countUp 1s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stat-item {
+                min-width: 150px;
+            }
+        }
+
+        /* Стили для интерактивного калькулятора */
+        .calculator {
+            background: #fff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 30px 0;
+        }
+
+        .calculator-visualization {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .room-preview {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            transition: all 0.3s ease;
+        }
+
+        /* Стили для временной шкалы */
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+            margin: 30px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--tg-theme-button-color);
+            transform: translateY(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--tg-theme-button-color);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Стили для галереи до/после */
+        .before-after {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 30px 0;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .before-after-slider {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: #fff;
+            cursor: ew-resize;
+        }
+
+        .before-after-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: ew-resize;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .before-after-handle::before,
+        .before-after-handle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 8px;
+            height: 2px;
+            background: var(--tg-theme-button-color);
+        }
+
+        .before-after-handle::before {
+            left: 8px;
+            transform: translateY(-50%) rotate(-45deg);
+        }
+
+        .before-after-handle::after {
+            right: 8px;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        /* Стили для анимированных иконок */
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .service-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--tg-theme-button-color);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .service-icon .circle {
+            stroke-dasharray: 180;
+            stroke-dashoffset: 180;
+            animation: drawCircle 2s ease forwards;
+        }
+
+        @keyframes drawCircle {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .service-icon .icon {
+            opacity: 0;
+            transform: scale(0.8);
+            animation: showIcon 0.5s ease forwards 1.5s;
+        }
+
+        @keyframes showIcon {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Добавляем библиотеку Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <!-- Пузырьки на фоне -->
     <span class="bubble"></span>
     <span class="bubble"></span>
@@ -577,6 +828,105 @@
                 </div>
             </div>
         </div>
+
+        <!-- Добавляем новую секцию со статистикой -->
+        <div class="statistics">
+            <h2 data-ru="Наша статистика" data-uz="Bizning statistikamiz">Наша статистика</h2>
+            <div class="stats-container">
+                <div class="stats-card">
+                    <canvas id="servicesChart"></canvas>
+                </div>
+                <div class="stats-card">
+                    <canvas id="satisfactionChart"></canvas>
+                </div>
+                <div class="stats-numbers">
+                    <div class="stat-item">
+                        <div class="stat-number" data-value="1000">0</div>
+                        <div class="stat-label" data-ru="Довольных клиентов" data-uz="Mamnun mijozlar">Довольных клиентов</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-value="5000">0</div>
+                        <div class="stat-label" data-ru="Уборок проведено" data-uz="Tozalash o'tkazildi">Уборок проведено</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-value="98">0</div>
+                        <div class="stat-label" data-ru="% положительных отзывов" data-uz="% ijobiy sharhlar">% положительных отзывов</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Интерактивный калькулятор -->
+        <div class="calculator">
+            <h2 data-ru="Калькулятор стоимости" data-uz="Narx kalkulyatori">Калькулятор стоимости</h2>
+            <div class="calculator-visualization">
+                <div class="room-preview"></div>
+            </div>
+            <div class="calculator-controls">
+                <div class="form-group">
+                    <label data-ru="Тип услуги:" data-uz="Xizmat turi:">Тип услуги:</label>
+                    <select id="serviceType" class="calculator-select">
+                        <option value="general" data-ru="Генеральная уборка" data-uz="Umumiy tozalash">Генеральная уборка</option>
+                        <option value="repair" data-ru="Уборка после ремонта" data-uz="Ta'mirdan keyin tozalash">Уборка после ремонта</option>
+                        <option value="furniture" data-ru="Химчистка мебели" data-uz="Mebelni kimyoviy tozalash">Химчистка мебели</option>
+                    </select>
+                </div>
+                <div class="calculator-result">
+                    <h3 data-ru="Примерная стоимость:" data-uz="Taxminiy narx:">Примерная стоимость:</h3>
+                    <div class="price-display">0 сум</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Временная шкала -->
+        <div class="timeline">
+            <h2 data-ru="Как мы работаем" data-uz="Biz qanday ishlaymiz">Как мы работаем</h2>
+            <div class="timeline-line"></div>
+            <div class="timeline-items">
+                <div class="timeline-item">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle class="circle" cx="12" cy="12" r="10"/>
+                            <path class="icon" d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <h3 data-ru="Заявка" data-uz="Ariza">Заявка</h3>
+                    <p data-ru="Оставьте заявку через приложение" data-uz="Ilova orqali ariza qoldiring">Оставьте заявку через приложение</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle class="circle" cx="12" cy="12" r="10"/>
+                            <path class="icon" d="M8 12l2 2 6-6"/>
+                        </svg>
+                    </div>
+                    <h3 data-ru="Подтверждение" data-uz="Tasdiqlash">Подтверждение</h3>
+                    <p data-ru="Мы свяжемся для уточнения деталей" data-uz="Tafsilotlarni aniqlashtirish uchun bog'lanamiz">Мы свяжемся для уточнения деталей</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle class="circle" cx="12" cy="12" r="10"/>
+                            <path class="icon" d="M12 6v6h6"/>
+                        </svg>
+                    </div>
+                    <h3 data-ru="Выполнение" data-uz="Bajarish">Выполнение</h3>
+                    <p data-ru="Наши специалисты выполнят работу" data-uz="Mutaxassislarimiz ishni bajaradi">Наши специалисты выполнят работу</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Галерея до/после -->
+        <div class="before-after-gallery">
+            <h2 data-ru="Наши работы" data-uz="Bizning ishlarimiz">Наши работы</h2>
+            <div class="before-after">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/before.jpg" alt="До уборки" class="before-image">
+                <img src="https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/after.jpg" alt="После уборки" class="after-image">
+                <div class="before-after-slider">
+                    <div class="before-after-handle"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal" id="aboutModal">
@@ -743,6 +1093,233 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('date').min = today;
             document.querySelectorAll('.extra, #area, #windows').forEach(input => input.addEventListener('change', updateTotal));
+
+            // Инициализация графиков
+            initializeCharts();
+            
+            // Анимация чисел при скролле
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateNumbers();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+
+            const statsSection = document.querySelector('.statistics');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
+        });
+
+        function initializeCharts() {
+            // График распределения услуг
+            const servicesCtx = document.getElementById('servicesChart');
+            if (servicesCtx) {
+                new Chart(servicesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Генеральная уборка', 'Уборка после ремонта', 'Химчистка'],
+                        datasets: [{
+                            data: [45, 30, 25],
+                            backgroundColor: [
+                                'rgba(42, 157, 217, 0.8)',
+                                'rgba(255, 111, 97, 0.8)',
+                                'rgba(111, 78, 55, 0.8)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            title: {
+                                display: true,
+                                text: language === 'ru' ? 'Распределение услуг' : 'Xizmatlar taqsimoti'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // График удовлетворенности клиентов
+            const satisfactionCtx = document.getElementById('satisfactionChart');
+            if (satisfactionCtx) {
+                new Chart(satisfactionCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн'],
+                        datasets: [{
+                            label: language === 'ru' ? 'Удовлетворенность' : 'Mamnuniyat',
+                            data: [92, 93, 95, 94, 96, 98],
+                            borderColor: 'rgba(42, 157, 217, 1)',
+                            tension: 0.4,
+                            fill: true,
+                            backgroundColor: 'rgba(42, 157, 217, 0.1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                min: 90,
+                                max: 100
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: language === 'ru' ? 'Удовлетворенность клиентов' : 'Mijozlar mamnuniyati'
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function animateNumbers() {
+            document.querySelectorAll('.stat-number').forEach(number => {
+                const targetValue = parseInt(number.dataset.value);
+                let currentValue = 0;
+                const duration = 2000;
+                const steps = 60;
+                const increment = targetValue / steps;
+                const interval = duration / steps;
+
+                number.classList.add('animate');
+
+                const counter = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= targetValue) {
+                        number.textContent = targetValue.toLocaleString();
+                        clearInterval(counter);
+                    } else {
+                        number.textContent = Math.floor(currentValue).toLocaleString();
+                    }
+                }, interval);
+            });
+        }
+
+        // Функционал калькулятора
+        function initializeCalculator() {
+            const calculator = document.querySelector('.calculator');
+            const serviceType = document.getElementById('serviceType');
+            const priceDisplay = document.querySelector('.price-display');
+            const roomPreview = document.querySelector('.room-preview');
+
+            const basePrice = {
+                general: 700000,
+                repair: 2500000,
+                furniture: 200000
+            };
+
+            const roomImages = {
+                general: 'https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/1%20xona.jpg',
+                repair: 'https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/posle%201.jpeg',
+                furniture: 'https://raw.githubusercontent.com/bushidomb/cleanko-mini-app/main/divan.jpg'
+            };
+
+            serviceType.addEventListener('change', () => {
+                const selected = serviceType.value;
+                const price = basePrice[selected];
+                priceDisplay.textContent = `${price.toLocaleString()} сум`;
+                roo
+mPreview.style.backgroundImage = `url(${roomImages[selected]})`;
+                roomPreview.style.transform = 'scale(1.05)';
+                setTimeout(() => roomPreview.style.transform = 'scale(1)', 300);
+            });
+
+            // Инициализация с первым значением
+            serviceType.dispatchEvent(new Event('change'));
+        }
+
+        // Функционал галереи до/после
+        function initializeBeforeAfter() {
+            const slider = document.querySelector('.before-after-slider');
+            const beforeAfter = document.querySelector('.before-after');
+            const beforeImage = document.querySelector('.before-image');
+            const afterImage = document.querySelector('.after-image');
+
+            let isResizing = false;
+
+            slider.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+
+                const rect = beforeAfter.getBoundingClientRect();
+                const x = e.pageX - rect.left;
+                const percent = (x / rect.width) * 100;
+
+                if (percent > 0 && percent < 100) {
+                    slider.style.left = `${percent}%`;
+                    afterImage.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                isResizing = false;
+            });
+
+            // Инициализация начального положения
+            afterImage.style.clipPath = 'inset(0 50% 0 0)';
+        }
+
+        // Анимация временной шкалы
+        function initializeTimeline() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.transform = 'translateY(0)';
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                item.style.transform = 'translateY(20px)';
+                item.style.opacity = '0';
+                item.style.transition = 'all 0.5s ease';
+                observer.observe(item);
+            });
+        }
+
+        // Инициализация всех новых компонентов
+        document.addEventListener('DOMContentLoaded', function() {
+            const userLang = tg.initDataUnsafe?.user?.language_code || navigator.language;
+            switchLanguage(userLang && userLang.startsWith('uz') ? 'uz' : 'ru');
+
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').min = today;
+            document.querySelectorAll('.extra, #area, #windows').forEach(input => 
+                input.addEventListener('change', updateTotal));
+
+            initializeCharts();
+            initializeCalculator();
+            initializeBeforeAfter();
+            initializeTimeline();
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateNumbers();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+
+            const statsSection = document.querySelector('.statistics');
+            if (statsSection) {
+                observer.observe(statsSection);
+            }
         });
     </script>
 </body>
